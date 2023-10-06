@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total de l'épicerie</title>
+</head>
+<body>
+    <h1>Calculateur de Total d'Épicerie</h1>
+
+    <form id="groceryForm">
+        <div>
+            <label for="product">Produit:</label>
+            <input type="text" id="product" name="product" required>
+        </div>
+        <div>
+            <label for="quantity">Quantité:</label>
+            <input type="number" id="quantity" name="quantity" required>
+        </div>
+        <div>
+            <label for="price">Prix par unité:</label>
+            <input type="number" id="price" name="price" step="0.01" required>
+        </div>
+        <button type="submit" id="addButton">Ajouter à la liste</button>
+    </form>
+
+    <h2>Liste d'Épicerie</h2>
+    <ul id="groceryList"></ul>
+
+    <p>Total: <span id="totalPrice"></span></p>
+
+    <script>
+        const form = document.getElementById("groceryForm");
+        const groceryList = [];
+
+        function updateTotalPrice() {
+            let totalPrice = 0;
+
+            for (const item of groceryList) {
+                totalPrice += item.quantity * item.price;
+            }
+
+            const totalPriceElement = document.getElementById("totalPrice");
+            totalPriceElement.textContent = totalPrice.toFixed(2);
+        }
+
+        // Appel initial pour afficher le total initial (0.00)
+        updateTotalPrice();
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const product = document.getElementById("product").value;
+            const quantity = parseFloat(document.getElementById("quantity").value);
+            const price = parseFloat(document.getElementById("price").value);
+
+            groceryList.push({ product, quantity, price });
+
+            const groceryListElement = document.getElementById("groceryList");
+            const li = document.createElement("li");
+            li.textContent = `${product} - Quantité: ${quantity}, Prix par unité: ${price}`;
+            groceryListElement.appendChild(li);
+
+            updateTotalPrice();
+
+            form.reset();
+        });
+    </script>
+</body>
+</html>
